@@ -2,7 +2,7 @@ import nflgame
 import csv
 games = nflgame.games(2015)
 players = nflgame.combine_game_stats(games)
-c = csv.writer(open("/rushing.csv", "wb"))
+c = csv.writer(open("/projects/python/playerreports/rushing.csv", "wb"))
 #This method outputs All rushing performance of the season and the opponents
 def all_rushing():
 	for game in games:
@@ -67,17 +67,28 @@ def def_vs_receiving():
 					
 def calc_ppcp_rb():
 		def_cp = {}
+		rush_games = {}
 		for game in games:
-			for p in game.players.receiving().sort("receiving_yds"):
-				opp = ""
-				yds_100 = []
+			def_cp[game.home] = 0
+			def_cp[game.away] = 0
+			for p in game.players.rushing().sort("rushing_yds"):
+				rush_games[p.name] = 0
+		for game in games:
+
+
+
+			for p in game.players.rushing().sort("rushing_yds"):
+
+
 				if p.team == game.home:
 					opp = game.away
 				else:
 					opp = game.home
-				def_cp[opp] = 0
-				if p.receiving_yds > 100:	
-					def_cp[opp] = def_cp[opp] + 1
-		c.writerow([def_cp])				
-					
+
+				if p.rushing_yds > 100:
+					def_cp[unicode(opp)] += 1
+					rush_games[p.name] += 1
+		c.writerow([def_cp])
+		print def_cp
+		print rush_games
 calc_ppcp_rb()
