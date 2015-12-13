@@ -2,7 +2,9 @@ import nflgame
 import csv
 games = nflgame.games(2015)
 players = nflgame.combine_game_stats(games)
-c = csv.writer(open("/projects/python/playerreports/rushing.csv", "wb"))
+rb = csv.writer(open("/projects/python/playerreports/rushing.csv", "wb"))
+wr = csv.writer(open("/projects/python/playerreports/receiving.csv", "wb"))
+qb = csv.writer(open("/projects/python/playerreports/passing.csv", "wb"))
 #This method outputs All rushing performance of the season and the opponents
 def all_rushing():
 	for game in games:
@@ -70,7 +72,7 @@ def calc_ppcp_rb():
 		rush_games = {}
 		matchup = {}
 	
-		week_11 = nflgame.games(2015, week=11)
+		week_11 = nflgame.games(2015, week=14)
 		for game in week_11:
 			
 			for p in game.players.rushing().sort("rushing_yds"):
@@ -106,12 +108,11 @@ def calc_ppcp_rb():
 					rush_games[p.name] += 1
 					
 		for team in def_cp: 
-			c.writerow([team,def_cp[team]])
+			rb.writerow([team,def_cp[team]])
 		for player in rush_games:
-			c.writerow([player,rush_games[player]])
+			rb.writerow([player,rush_games[player]])
 		
-		for m in matchup:
-			c.writerow([m, matchup[m], def_cp[matchup[m]] + rush_games[m]])
+
 			
 
 			
@@ -121,7 +122,7 @@ def calc_ppcp_QB():
 		rush_games = {}
 		matchup = {}
 	
-		week_10 = nflgame.games(2015, week=10)
+		week_10 = nflgame.games(2015, week=14)
 		for game in week_10:
 			
 			for p in game.players.passing().sort("passing_yds"):
@@ -157,12 +158,11 @@ def calc_ppcp_QB():
 					rush_games[p.name] += 1
 					
 		for team in def_cp: 
-			c.writerow([team,def_cp[team]])
+			qb.writerow([team,def_cp[team]])
 		for player in rush_games:
-			c.writerow([player,rush_games[player]])
+			qb.writerow([player,rush_games[player]])
 		
-		for m in matchup:
-			c.writerow([m, matchup[m], def_cp[matchup[m]] + rush_games[m]])
+	
 			
 			
 			
@@ -175,7 +175,7 @@ def calc_ppcp_WR():
 		rush_games = {}
 		matchup = {}
 	
-		week_10 = nflgame.games(2015, week=10)
+		week_10 = nflgame.games(2015, week=14)
 		for game in week_10:
 			
 			for p in game.players.receiving().sort("receiving_yds"):
@@ -211,10 +211,11 @@ def calc_ppcp_WR():
 					rush_games[p.name] += 1
 					
 		for team in def_cp: 
-			c.writerow([team,def_cp[team]])
+			wr.writerow([team,def_cp[team]])
 		for player in rush_games:
-			c.writerow([player,rush_games[player]])
+			wr.writerow([player,rush_games[player]])
 		
-		for m in matchup:
-			c.writerow([m, matchup[m], def_cp[matchup[m]] + rush_games[m]])
+		
 calc_ppcp_QB()
+calc_ppcp_WR()
+calc_ppcp_rb()
